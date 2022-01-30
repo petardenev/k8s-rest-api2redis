@@ -4,7 +4,9 @@ WORKDIR /k8-rest-api2redis
 
 COPY . /k8-rest-api2redis
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server -a -tags netgo
+RUN go mod init && \
+    go mod vendor && \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server -a -tags netgo
 
 FROM scratch
 

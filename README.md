@@ -1,5 +1,28 @@
 # k8s Rest-Api 2 Redis example
 
+Kubernetes ready GO Lang REST-API for querying Redis
+
+## Install minikube
+
+Considering the fact that the machine testing the solution will either have minikube installed OR
+it will run Linux
+```
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+## Test Dataset
+
+```
+[
+    {
+        "firstname": "Homer",
+        "lasname": "Simpson"
+    }
+]
+```
+
+
 ## Simply build the application
 ```
 git clone https://github.com/petardenev/k8s-rest-api2redis.git
@@ -11,7 +34,7 @@ cd k8s-rest-api2redis
 ```
 git clone https://github.com/petardenev/k8s-rest-api2redis.git
 cd k8s-rest-api2redis
-./helper.sh compose --version-tag v0.01a
+./helper.sh compose
 ```
 
 ## Deploy on Minikube
@@ -19,17 +42,8 @@ cd k8s-rest-api2redis
 git clone https://github.com/petardenev/k8s-rest-api2redis.git
 cd k8s-rest-api2redis
 minikube start (you need to install minikube before)
-./helper.sh deploy --version-tag v0.01a
+./helper.sh deploy
 ```
-
-Because we are using the local Minikube cluster, it is not possible to expose the Ingress Controller
-as a 'LoadBalancer' Service(usually you should) on your cloud provider.
-
-In order to access the api via Ingress, you have to run:
-```
-kubectl describe svc --namespace=kube-system traefik-ingress-service
-```
-you need to find the exposed port, for example. 31321, use this port as {api-port}
 
 ## Test
 
@@ -46,7 +60,7 @@ Content-Type: application/json
 
 ```
 // get
-GET http://{minikube-ip}:{api-port}}/api/user/1
+GET http://{minikube-ip}:{api-port}}/api/user/Homer
 Host: api.minikube
 Content-Type: application/json
 ```

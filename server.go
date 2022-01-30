@@ -32,7 +32,7 @@ func newServer(redisCli *redis.Client) *echo.Echo {
 		user.NewRepository(redisCli))
 
 	e := echo.New()
-	e.Logger.SetLevel(log.INFO)
+	e.Logger.SetLevel(log.DEBUG)
 	e.GET("/user/:firstname", userController.Get)
 	e.POST("/user", userController.Create)
 

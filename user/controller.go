@@ -48,8 +48,8 @@ func (c *controller) Create(ctx echo.Context) error {
 
 // Get returns a user.
 func (c *controller) Get(ctx echo.Context) error {
-	name := ctx.Param("name")
-	user, err := c.repository.FindByName(name)
+	firstname := ctx.Param("firstname")
+	user, err := c.repository.FindByName(firstname)
 	if err != nil {
 		return err
 	}
