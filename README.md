@@ -27,14 +27,14 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
 git clone https://github.com/petardenev/k8s-rest-api2redis.git
 cd k8s-rest-api2redis
-./helper.sh build --version-tag v0.01a
+./builder.sh build --version-tag v0.01a
 ```
 
 ## Test with docker-compose
 ```
 git clone https://github.com/petardenev/k8s-rest-api2redis.git
 cd k8s-rest-api2redis
-./helper.sh compose
+./builder.sh compose
 ```
 
 ## Deploy on Minikube
@@ -42,7 +42,7 @@ cd k8s-rest-api2redis
 git clone https://github.com/petardenev/k8s-rest-api2redis.git
 cd k8s-rest-api2redis
 minikube start (you need to install minikube before)
-./helper.sh deploy
+./builder.sh deploy
 ```
 
 ## Test

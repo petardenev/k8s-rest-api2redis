@@ -1,0 +1,45 @@
+image: atlassian/pipelines-awscli
+
+buildSteps:
+  - buildDocker: &buildDocker
+      name: build Docker
+      image: atlassian/pipelines-awscli
+      script:
+        - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+        - builder.sh build --version-tag ${BITBUCKET_COMMIT}
+        - docker tag api:${BITBUCKET_COMMIT} ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/${BITBUCKET_REPO_SLUG}:${BITBUCKET_COMMIT}
+        - docker push ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/${BITBUCKET_REPO_SLUG}:${BITBUCKET_COMMIT}
+        - docker tag ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/${BITBUCKET_REPO_SLUG}:${BITBUCKET_COMMIT}
+  - deploySandbox: &deploySandbox
+      name: deploy Sandbox
+      deployment: test
+      image: atlassian/pipelines-awscli
+      trigger: manual
+      script:
+        - echo "Deploying to Sandbox"
+        - builder.sh deploy
+  - deployProduction: &deployProduction
+      name: deploy Production
+      deployment: production
+      image: atlassian/pipelines-awscli
+      trigger: manual
+      script:
+        - echo "Deploying to Production"
+        - builder.sh deploy --prod
+
+pipelines:
+  default:
+    - step: *buildDocker
+    - step: *deploySandbox
+
+  branches:
+    master:
+      - step: *buildDocker
+      - step: *deploySandbox
+      - step: *deployProduction
+
+caches:
+  - docker
+
+options:
+  docker: true
